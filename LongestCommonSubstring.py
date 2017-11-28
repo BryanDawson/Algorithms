@@ -6,21 +6,21 @@
 """
 
 
-def lcs_dynamic(s1, s2):
+def lcs_dynamic(str1, str2):
     """ Returns the longest common substring using dynamic programming"""
 
-    m = [[0] * (1 + len(s2)) for i in range(1 + len(s1))]
+    mat = [[0] * (len(str2) + 1) for i in range(len(str1) + 1)]
     longest, x_longest = 0, 0
-    for x in range(1, 1 + len(s1)):
-        for y in range(1, 1 + len(s2)):
-            if s1[x - 1] == s2[y - 1]:
-                m[x][y] = m[x - 1][y - 1] + 1
-                if m[x][y] > longest:
-                    longest = m[x][y]
+    for x in range(1, len(str1) + 1):
+        for y in range(1, 1 + len(str2)):
+            if str1[x - 1] == str2[y - 1]:
+                mat[x][y] = mat[x - 1][y - 1] + 1
+                if mat[x][y] > longest:
+                    longest = mat[x][y]
                     x_longest = x
             else:
-                m[x][y] = 0
-    return s1[x_longest - longest: x_longest]
+                mat[x][y] = 0
+    return str1[x_longest - longest: x_longest]
 
 
 def main():
