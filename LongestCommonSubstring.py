@@ -28,7 +28,18 @@ def main():
 
     string1 = "The next virtue is: Freedom is better than slavery.".split()
     string2 = "Poverty in freedom is better than riches in chains".split()
+    print(lcs_dynamic(string1, string2))
 
+    string1 = "When in the course of human events".split()
+    string2 = "it becomes necessary to declare".split()
+    print(lcs_dynamic(string1, string2))
+
+    string1 = "A stitch in time saves nine".split()
+    string2 = "A short walk after dinner".split()
+    print(lcs_dynamic(string1, string2))
+
+    string1 = "Never has there been a happier time".split()
+    string2 = "The clock spells out the time".split()
     print(lcs_dynamic(string1, string2))
 
 
