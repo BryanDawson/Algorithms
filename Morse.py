@@ -2,6 +2,8 @@
 
     Note: OK, not really an algorithm, but something I saw and wanted to try"""
 
+from textwrap import fill
+
 MORSE_DCODE = {'..-.': 'F', '-..-': 'X',
                '.--.': 'P', '-': 'T', '..---': '2',
                '....-': '4', '-----': '0', '--...': '7',
@@ -10,7 +12,8 @@ MORSE_DCODE = {'..-.': 'F', '-..-': 'X',
                '.-..': 'L', '.....': '5', '...--': '3', '-.--': 'Y',
                '-....': '6', '.--': 'W', '....': 'H', '-.': 'N', '.-.': 'R',
                '-...': 'B', '---..': '8', '--..': 'Z', '-..': 'D', '--.-': 'Q',
-               '--.': 'G', '--': 'M', '..-': 'U', '.-': 'A', '...': 'S', '.----': '1'
+               '--.': 'G', '--': 'M', '..-': 'U', '.-': 'A', '...': 'S', '.----': '1',
+               '--..--': ',', '.-.-.-': '.', '.----.': "'"
               }
 
 MORSE_NCODE = {'A': '.-', 'B': '-...', 'C': '-.-.',
@@ -26,7 +29,9 @@ MORSE_NCODE = {'A': '.-', 'B': '-...', 'C': '-.-.',
                '0': '-----', '1': '.----', '2': '..---',
                '3': '...--', '4': '....-', '5': '.....',
                '6': '-....', '7': '--...', '8': '---..',
-               '9': '----.'
+               '9': '----.',
+
+               ',': '--..--', '.': '.-.-.-', "'": '.----.'
               }
 
 
@@ -72,6 +77,17 @@ def main():
 
     print(decode_morse(encode_morse("HELLO WORLD")))
     print(decode_morse(encode_morse(" Once upon a time in a very dark place     ".upper())))
+
+    # One more test round-tripping a long, multi-line string
+    print(fill(decode_morse(encode_morse(
+        """
+        As a man gets ready for work, we see that he is tense and sweating.
+        His wife kisses him goodbye and wishes him good luck. The man throws
+        her an uneasy look and picks up his briefcase. We don't even know
+        what is about to take place yet, but we are certainly looking forward
+        to finding out how it turns out.
+        """.upper()
+    ))))
 
 
 main()
