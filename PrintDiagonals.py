@@ -19,13 +19,13 @@ def printdiagonals(arr):
     # First add the diagonals that correspond to each row
     for row in range(len(arr)):
         output += ' '.join([str(arr[drow][dcol]) for drow, dcol
-                            in zip(range(row, -1, -1), range(row+1))])
+                            in zip(reversed(range(row)), range(row+1))])
         output += '\n'
 
     # Now add the remaining diagonals that correspond to the columns 1 through n
     for col in range(1, len(arr[0])):
         output += ' '.join([str(arr[drow][dcol]) for drow, dcol
-                            in zip(range(len(arr)-1, -1, -1), range(col, len(arr[0])))])
+                            in zip(reversed(range(len(arr))), range(col, len(arr[0])))])
         output += '\n'
 
     print(output)
