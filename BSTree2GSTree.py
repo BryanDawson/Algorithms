@@ -5,7 +5,6 @@
 
 """
 
-# TODO: Finish implentation of BST to GST
 
 class Node:  # pylint: disable=too-few-public-methods
     """Implements a container node for building a binary tree"""
@@ -17,10 +16,11 @@ class Node:  # pylint: disable=too-few-public-methods
 
 
 def insert(root, data):
-    """Implements insert data into tree
+    """Implements insert data into tree (BST)
 
        Assumes that root is valid Node containing data
          and that all all items in the tree are the same type
+         (Integer assumed for Greater Sum Tree)
     """
 
     if root.data < data:
@@ -35,11 +35,35 @@ def insert(root, data):
             insert(root.left, data)
 
 
-def inorder(root):
-    if root is not None:
-        inorder(root.left)
-        print(root.data, end=' ')
-        inorder(root.right)
+class BstToGst:
+    """Class for Convert BST to Greater Sum Tree
+
+       Note: A class wouldn't really be needed here except for the requirement
+             to initialize the sum for each new instance.  Moving the sum to
+             a module global seemed inappropriate because that exposes the inner
+             workings of greater_tree()
+    """
+
+    def __init__(self):
+        self.sum = 0
+
+    def inorder(self, root):
+        """Print an inorder traversal of the tree"""
+
+        if root is not None:
+            self.inorder(root.left)
+            print(root.data, end=' ')
+            self.inorder(root.right)
+
+    def greater_tree(self, root):
+        """Transforms Binary Search Tree at root to a Greater Sum Tree"""
+
+        if root is not None:
+            self.greater_tree(root.right)  # Traverse the right nodes first
+            temp = root.data   # Store the current data in temp
+            root.data = self.sum  # Sum so far into current root data
+            self.sum += temp   # Update sum for use by next node
+            self.greater_tree(root.left)
 
 
 def main():
@@ -52,15 +76,12 @@ def main():
     insert(root, 7)
     insert(root, 12)
     insert(root, 20)
-    inorder(root)
+    gst = BstToGst()
+    gst.inorder(root)
+    gst.greater_tree(root)
     print()
-
-    root = Node("blue")
-    insert(root, "red")
-    insert(root, "green")
-    insert(root, "yellow")
-    inorder(root)
-
+    gst.inorder(root)
+    print()
 
 
 main()
