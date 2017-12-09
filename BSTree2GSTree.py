@@ -60,9 +60,7 @@ class BstToGst:
 
         if root is not None:
             self.greater_tree(root.right)  # Traverse the right nodes first
-            temp = root.data   # Store the current data in temp
-            root.data = self.sum  # Sum so far into current root data
-            self.sum += temp   # Update sum for use by next node
+            root.data, self.sum = self.sum, self.sum + root.data
             self.greater_tree(root.left)
 
 
