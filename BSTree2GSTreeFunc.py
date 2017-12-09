@@ -48,27 +48,25 @@ def inorder(root):
         inorder(root.right)
 
 
-# NOTE: using a global _sum and an initializer function as an exercise in re-writing
-#       the implementation to NOT use a class.
-_sum = 0
-
-
 def greater_tree(root):
-    """Initialize the sum prior to recursive calls"""
+    """Initialize the sum prior to recursive calls
 
-    global _sum
+       Note: using nested function and nonlocal to create a 'class like'
+             data encapsulation.
+    """
+
     _sum = 0
+
+    def _greater_tree(_root):
+        """Transforms Binary Search Tree at root to a Greater Sum Tree"""
+
+        nonlocal _sum
+        if _root is not None:
+            _greater_tree(_root.right)  # Traverse the right nodes first
+            _root.data, _sum = _sum, _sum + _root.data
+            _greater_tree(_root.left)
+
     _greater_tree(root)
-
-
-def _greater_tree(root):
-    """Transforms Binary Search Tree at root to a Greater Sum Tree"""
-
-    global _sum
-    if root is not None:
-        _greater_tree(root.right)  # Traverse the right nodes first
-        root.data, _sum = _sum, _sum + root.data
-        _greater_tree(root.left)
 
 
 def main():
