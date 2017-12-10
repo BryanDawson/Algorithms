@@ -70,9 +70,16 @@ class LinkedList:
 def main():
     """Test Harness for linked list manipulations"""
 
-    cases = dict(list=True, rev=False, rev1=False, revk=False, revak=False)
+    # Tuple controls which test cases run. Comment any that should not run.
+    testcases = (
+        'list',
+        'rev',
+        'rev2',
+        'revk',
+        'revak'
+    )
 
-    if cases['list']:
+    if 'list' in testcases:
         link_list = LinkedList()
         link_list.insert(1)
         link_list.insert(1)
