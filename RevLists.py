@@ -34,9 +34,12 @@ class Node:   # pylint: disable=too-few-public-methods
 class LinkedList:
     """Implements a singly linked list"""
 
-    def __init__(self):
+    def __init__(self, list_len=None):
         self.first = None
         self.last = None
+        if list_len is not None:  # Build a default initial list
+            for item in range(1, list_len+1):
+                self.insert(item)
 
     def insert(self, data):
         """Implements insert data node into list"""
@@ -62,6 +65,48 @@ class LinkedList:
             return out + ']'
         return 'LinkedList []'
 
+    def reverse(self):
+        """Reverses the order of the linked list iteratively"""
+
+        # Intialize current to head, prev to None
+        curr_node, prev_node = self.first, None
+        # Swap first and last now
+        self.first, self.last = self.last, self.first
+
+        while curr_node is not None:
+            next_node = curr_node.next
+            curr_node.next = prev_node
+            prev_node = curr_node
+            curr_node = next_node
+
+    def reverse_recur(self):
+        """Wraps the inner recursive version
+           so that the two reverse methods have the same signature"""
+
+        def _reverse_recur(current):
+            """Reverses the order of the linked list recursively"""
+
+            if current is None:
+                return
+            if current.next is None:
+                self.first = current
+                return
+            _reverse_recur(current.next)
+            current.next.next = current
+            current.next = None
+            self.last = current
+
+        _reverse_recur(self.first)
+
+    def reverse_groups(self, ksize=3):
+        """Reverse Linked List in groups of given size ‘K’
+
+           Note: default group size simplifies test harness
+        """
+        # TODO: finish implementation
+        print(ksize)
+        return
+
     def clear(self):
         """Implements clear out linked list"""
         self.__init__()
@@ -70,23 +115,25 @@ class LinkedList:
 def main():
     """Test Harness for linked list manipulations"""
 
-    # Tuple controls which test cases run. Comment any that should not run.
+    # Tuple of functions drives the test cases.
+    #  Comment out any that should not be run.
     testcases = (
-        'list',
-        'rev',
-        'rev2',
-        'revk',
-        'revak'
+        LinkedList.reverse,
+        LinkedList.reverse_recur,
+        LinkedList.reverse_groups
     )
 
-    if 'list' in testcases:
-        link_list = LinkedList()
-        link_list.insert(1)
-        link_list.insert(1)
-        link_list.insert(2)
-        link_list.insert(4)
-        print(link_list)
+    for func in testcases:
+        print("\nTesting: ", func.__name__)
+        link_list = LinkedList(8)
+        print("Initial List:", link_list)
+        print("first:", link_list.first.value, "last:", link_list.last.value)
+        func(link_list)
+        print("Reversed List: ", link_list)
+        print("first:", link_list.first.value, "last:", link_list.last.value)
+        print("Confirm success on empty list case...")
         link_list.clear()
+        func(link_list)
         print(link_list)
 
 
