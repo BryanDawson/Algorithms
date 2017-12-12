@@ -14,127 +14,111 @@
 
 """
 
-# TODO: Finish implementations
+# TODO: Complete the implementations
 
-
-# NOTE: class Node and class LinkedList implementations borrowed intact
-#       (but with PEP8 fixes and other minor changes) from:
-#        https://stackoverflow.com/a/3538133
-class Node:   # pylint: disable=too-few-public-methods
+class Node:  # pylint: disable=too-few-public-methods
     """Implements a container node for building linked lists"""
 
-    def __init__(self, value=None, next_node=None):
-        self.value = value
-        self.next = next_node
-
-    def __str__(self):
-        return 'Node [' + str(self.value) + ']'
+    def __init__(self, data=None):
+        self.next = None
+        self.data = data
 
 
-class LinkedList:
-    """Implements a singly linked list"""
+def insert(head, data):
+    """Implements insert data into list
 
-    def __init__(self, list_len=None):
-        self.first = None
-        self.last = None
-        if list_len is not None:  # Build a default initial list
-            for item in range(1, list_len+1):
-                self.insert(item)
+       Assumes that head points to a valid node
+    """
 
-    def insert(self, data):
-        """Implements insert data node into list"""
+    if head.next is None:
+        head.next = Node(data)
+    else:
+        insert(head.next, data)
 
-        if self.first is None:
-            self.first = Node(data, None)
-            self.last = self.first
-        elif self.last == self.first:
-            self.last = Node(data, None)
-            self.first.next = self.last
-        else:
-            current = Node(data, None)
-            self.last.next = current
-            self.last = current
 
-    def __str__(self):
-        if self.first is not None:
-            current = self.first
-            out = 'LinkedList [ ' + str(current.value) + ' '
-            while current.next is not None:
-                current = current.next
-                out += str(current.value) + ' '
-            return out + ']'
-        return 'LinkedList []'
+def list_print(head):
+    """Simple printout of linked list"""
 
-    def reverse(self):
-        """Reverses the order of the linked list iteratively"""
+    print("Linked List [ ", end='')
+    while head is not None:
+        print(head.data, end=' ')
+        head = head.next
+    print(']')
 
-        # Intialize current to head, prev to None
-        curr_node, prev_node = self.first, None
-        # Swap first and last now
-        self.first, self.last = self.last, self.first
 
-        while curr_node is not None:
-            next_node = curr_node.next
-            curr_node.next = prev_node
-            prev_node = curr_node
-            curr_node = next_node
+def build_range(count):
+    """Build a linked list initialized with range 1 to count"""
 
-    def reverse_recur(self):
-        """Wraps the inner recursive version
-           so that the two reverse methods have the same signature"""
+    head = Node(1)
+    for item in range(2, count+1):
+        insert(head, item)
+    return head
 
-        def _reverse_recur(current):
-            """Reverses the order of the linked list recursively"""
 
-            if current is None:
-                return
-            if current.next is None:
-                self.first = current
-                return
-            _reverse_recur(current.next)
-            current.next.next = current
-            current.next = None
-            self.last = current
+def reverse(head):
+    """Reverses the order of the linked list iteratively"""
 
-        _reverse_recur(self.first)
+    # Intialize current to head, prev to None
+    curr_node, prev_node = head, None
 
-    def reverse_groups(self, ksize=3):
-        """Reverse Linked List in groups of given size ‘K’
+    while curr_node is not None:
+        next_node = curr_node.next
+        curr_node.next = prev_node
+        prev_node = curr_node
+        curr_node = next_node
 
-           Note: default group size simplifies test harness
-        """
-        # TODO: finish implementation
-        print(ksize)
-        return
+    return prev_node
 
-    def clear(self):
-        """Implements clear out linked list"""
-        self.__init__()
+
+def reverse_recur(current):
+    """Reverses the order of the linked list recursively"""
+
+    if current is None:
+        return None
+    if current.next is None:
+        return current
+    head = reverse_recur(current.next)
+    current.next.next = current
+    current.next = None
+    return head
+
+
+def reverse_groups(head, group_size):
+    """Reverse a Linked List in groups of given size ‘K’"""
+
+    # Intialize current to head, prev to None
+    curr_node, prev_node, next_node = head, None, None
+    count = group_size
+
+    while curr_node is not None and count > 0:
+        next_node = curr_node.next
+        curr_node.next = prev_node
+        prev_node = curr_node
+        curr_node = next_node
+        count -= 1
+
+    if next_node is not None:
+        head.next = reverse_groups(next_node, group_size)
+
+    return prev_node
 
 
 def main():
-    """Test Harness for linked list manipulations"""
+    """Test Harness for exercises on reversing all or part of linked list"""
 
-    # Tuple of functions drives the test cases.
-    #  Comment out any that should not be run.
-    testcases = (
-        LinkedList.reverse,
-        LinkedList.reverse_recur,
-        LinkedList.reverse_groups
-    )
-
-    for func in testcases:
-        print("\nTesting: ", func.__name__)
-        link_list = LinkedList(8)
-        print("Initial List:", link_list)
-        print("first:", link_list.first.value, "last:", link_list.last.value)
-        func(link_list)
-        print("Reversed List: ", link_list)
-        print("first:", link_list.first.value, "last:", link_list.last.value)
-        print("Confirm success on empty list case...")
-        link_list.clear()
-        func(link_list)
-        print(link_list)
+    print("Testing reverse:")
+    link_list = build_range(8)
+    list_print(link_list)
+    link_list = reverse(link_list)
+    list_print(link_list)
+    print("\nTesting reverse_recur:")
+    list_print(link_list)
+    link_list = reverse_recur(link_list)
+    list_print(link_list)
+    print("\nTesting reverse_groups:")
+    list_print(link_list)
+    link_list = reverse_groups(link_list, 3)
+    list_print(link_list)
 
 
 main()
