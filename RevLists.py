@@ -14,7 +14,6 @@
 
 """
 
-# TODO: Complete the implementations
 
 class Node:  # pylint: disable=too-few-public-methods
     """Implements a container node for building linked lists"""
@@ -58,8 +57,8 @@ def build_range(count):
 def reverse(head):
     """Reverses the order of the linked list iteratively"""
 
-    # Intialize current to head, prev to None
-    curr_node, prev_node = head, None
+    # Intialize current to head, prev to None, next to None
+    curr_node, prev_node, next_node = head, None, None
 
     while curr_node is not None:
         next_node = curr_node.next
@@ -86,7 +85,7 @@ def reverse_recur(current):
 def reverse_groups(head, group_size):
     """Reverse a Linked List in groups of given size ‘K’"""
 
-    # Intialize current to head, prev to None
+    # Intialize current to head, prev to None, next to None
     curr_node, prev_node, next_node = head, None, None
     count = group_size
 
@@ -103,6 +102,37 @@ def reverse_groups(head, group_size):
     return prev_node
 
 
+def reverse_altern_groups(head, group_size):
+    """Reverse a Linked List in alternate groups of given size ‘K’"""
+
+    # Intialize current to head, prev to None, next to None
+    curr_node, prev_node, next_node = head, None, None
+    count = group_size
+
+    while curr_node is not None and count > 0:
+        next_node = curr_node.next
+        curr_node.next = prev_node
+        prev_node = curr_node
+        curr_node = next_node
+        count -= 1
+
+    # Attach the new end of the sub-list (was head) onto the next sub-list
+    if head is not None:
+        head.next = next_node
+
+    # Now skip over the next batch that we won't be reversing
+    count = group_size
+    while next_node is not None and count > 1:
+        next_node = next_node.next
+        count -= 1
+
+    # Recursively reverse the rest of the list
+    if next_node is not None:
+        next_node.next = reverse_altern_groups(next_node.next, group_size)
+
+    return prev_node
+
+
 def main():
     """Test Harness for exercises on reversing all or part of linked list"""
 
@@ -111,13 +141,29 @@ def main():
     list_print(link_list)
     link_list = reverse(link_list)
     list_print(link_list)
+
     print("\nTesting reverse_recur:")
     list_print(link_list)
     link_list = reverse_recur(link_list)
     list_print(link_list)
+
     print("\nTesting reverse_groups:")
     list_print(link_list)
     link_list = reverse_groups(link_list, 3)
+    list_print(link_list)
+
+    print("\nTesting reverse_altern_groups:")
+    link_list = build_range(12)
+    list_print(link_list)
+    link_list = reverse_altern_groups(link_list, 2)
+    list_print(link_list)
+    link_list = build_range(12)
+    list_print(link_list)
+    link_list = reverse_altern_groups(link_list, 3)
+    list_print(link_list)
+    link_list = build_range(14)
+    list_print(link_list)
+    link_list = reverse_altern_groups(link_list, 3)
     list_print(link_list)
 
 
